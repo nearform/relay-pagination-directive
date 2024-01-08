@@ -1,0 +1,8 @@
+{
+  "checkCoverage": true,
+  "all": true,
+  "src": ["./src"],
+  "lines": 100,
+  "branches": 95,
+  "statements": 100
+}
