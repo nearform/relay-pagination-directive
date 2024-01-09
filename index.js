@@ -1,5 +1,6 @@
 export { connectionDirective } from './src/connectionDirective.js'
 export {
   decodeCursor,
-  encodeCursor
+  encodeCursor,
+  PAGINATION_MODE
 } from './src/helpers.js'

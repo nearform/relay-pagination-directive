@@ -54,7 +54,7 @@ export function connectionFromArray(
         startCursor: getCursor(slice[0]),
         endCursor: getCursor(slice[slice.length - 1]),
         hasPreviousPage: pageInfoPartial?.hasPreviousPage ?? !!after,
-        hasNextPage: pageInfoPartial?.hasNextPage ?? slice.length === first,
+        hasNextPage: pageInfoPartial?.hasNextPage ?? arrayItems.length >= first,
       },
     }
   }
@@ -74,7 +74,7 @@ export function connectionFromArray(
       startCursor: edges[0].cursor,
       endCursor: edges[edges.length - 1].cursor,
       hasPreviousPage: pageInfoPartial?.hasPreviousPage ?? !!after,
-      hasNextPage: pageInfoPartial?.hasNextPage ?? arrayItems >= first,
+      hasNextPage: pageInfoPartial?.hasNextPage ?? arrayItems.length >= first,
     },
   }
 }

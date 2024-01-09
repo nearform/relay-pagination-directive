@@ -28,7 +28,7 @@ test('decodeCursor', async t => {
   })
 })
 
-test('connectionFromArraySlice', async t => {
+test('connectionFromArray', async t => {
   const data = () => [
     { id: 10001, otherId: 8001, name: 'foo' },
     { id: 10002, otherId: 8002, name: 'bar' },
@@ -148,7 +148,11 @@ test('connectionFromArraySlice', async t => {
           first: 2,
           after: 1,
         },
-        { edgeProps: ['otherId'] },
+        {
+          edgeProps: {
+            otherId: 'Int',
+          },
+        },
       ),
       {
         edges: [

@@ -1,7 +1,12 @@
 import { mergeSchemas } from '@graphql-tools/schema'
 import { MapperKind, getDirective, mapSchema } from '@graphql-tools/utils'
 import { TransformObjectFields, wrapSchema } from '@graphql-tools/wrap'
-import { GraphQLObjectType, GraphQLScalarType, GraphQLNonNull } from 'graphql'
+import {
+  GraphQLObjectType,
+  GraphQLScalarType,
+  GraphQLNonNull,
+  defaultFieldResolver,
+} from 'graphql'
 import { PAGINATION_MODE, connectionFromArray } from './helpers.js'
 import { z } from 'zod'
 
@@ -11,12 +16,7 @@ const typeOptionsMapValidator = z.record(
     paginationMode: z.optional(
       z.enum(Object.values(PAGINATION_MODE)).default(PAGINATION_MODE.EDGES),
     ),
-    cursor: z.optional(
-      z.union([
-        z.string().min(1),
-        z.function().args(z.object()).returns(z.string()),
-      ]),
-    ),
+    cursorPropOrFn: z.optional(z.union([z.string().min(1), z.function()])),
     connectionProps: z.optional(z.record(z.string(), z.string())),
     edgeProps: z.optional(
       z.record(
@@ -59,7 +59,7 @@ export function connectionDirective(
             // create a map of type properties to their original response type
             connectionTypes[getTypeKey(typeName, fieldName)] = {
               typeName: match[0],
-              resolver: fieldConfig.resolve,
+              resolver: fieldConfig.resolve ?? defaultFieldResolver,
               prefix: directive['prefix'] ?? match[0],
             }
           }
@@ -82,14 +82,22 @@ export function connectionDirective(
       // Add edges/connections for all discovered @connection types
       for (const typeConfig of Object.values(connectionTypes)) {
         const { typeName, prefix } = typeConfig
+        const typeOptions = options[typeName]
 
-        const newEdgeName = `${prefix}Edge`
-        if (!existingTypes[newEdgeName]) {
+        const edgeName =
+          typeOptions?.paginationMode === PAGINATION_MODE.SIMPLE
+            ? typeName
+            : `${prefix}Edge`
+
+        if (
+          typeOptions?.paginationMode !== PAGINATION_MODE.SIMPLE &&
+          !existingTypes[edgeName]
+        ) {
           newTypes.push(`
-            type ${newEdgeName} {
+            type ${edgeName} {
               cursor: ID!
               node: ${typeName}
-              ${mapAdditionalProps(options[typeName]?.edgeProps, prefix)}
+              ${mapAdditionalProps(typeOptions?.edgeProps, prefix)}
             }
           `)
         }
@@ -98,9 +106,9 @@ export function connectionDirective(
         if (!existingTypes[newConnectionName]) {
           newTypes.push(`
             type ${newConnectionName} {
-              edges: [${newEdgeName}!]!
+              edges: [${edgeName}!]!
               pageInfo: PageInfo!
-              ${mapAdditionalProps(options[typeName]?.connectionProps, prefix)}
+              ${mapAdditionalProps(typeOptions?.connectionProps, prefix)}
             }
           `)
         }
@@ -122,9 +130,11 @@ export function connectionDirective(
               prefix,
               resolver: originalResolver,
             } = connectionTypes[typeKey]
+            const typeOptions = options[baseType]
 
             // update the response type for @connection types
             fieldConfig.type = getConnectionType(prefix)
+
             fieldConfig.args = {
               ...fieldConfig.args,
               ...getConnectionArgs(),
@@ -132,7 +142,6 @@ export function connectionDirective(
 
             fieldConfig.resolve = async (root, args, ctx, info) => {
               const res = await originalResolver(root, args, ctx, info)
-              const typeOptions = options[baseType]
               if (typeOptions) {
                 typeOptions.edgeProps =
                   typeOptions.edgeProps?.[prefix] ?? typeOptions.edgeProps
@@ -147,10 +156,10 @@ export function connectionDirective(
               if (Array.isArray(res))
                 return connectionFromArray(res, args, typeOptions)
 
-              const { nodes, pageInfo, ...connectionProps } = res
+              const { edges, pageInfo, ...connectionProps } = res
 
               return connectionFromArray(
-                nodes,
+                edges,
                 args,
                 typeOptions,
                 pageInfo,
