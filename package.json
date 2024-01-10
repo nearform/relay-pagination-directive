@@ -1,33 +1,53 @@
 {
-  "name": "hub-template",
+  "name": "relay-pagination-directive",
   "version": "1.0.0",
-  "description": "Template to start a new repository on the hub",
+  "description": "GQL directive to simplify relay style pagination",
   "main": "index.js",
+  "types": "index.d.ts",
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "node --test src/",
+    "test:watch": "c8 node --test --watch src/",
+    "coverage": "c8 npm run test",
     "prepare": "husky install"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nearform/hub-template.git"
+    "url": "git+https://github.com/nearform/relay-pagination-directive.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "graphql",
+    "relay",
+    "pagination"
+  ],
+  "author": "Luke Jones",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nearform/hub-template/issues"
+    "url": "https://github.com/nearform/relay-pagination-directive/issues"
   },
-  "homepage": "https://github.com/nearform/hub-template#readme",
+  "homepage": "https://github.com/nearform/relay-pagination-directive#readme",
+  "dependencies": {
+    "@graphql-tools/schema": "^10.0.2",
+    "@graphql-tools/utils": "^10.0.12",
+    "@graphql-tools/wrap": "^10.0.1",
+    "graphql": "^16.8.1",
+    "zod": "^3.22.4"
+  },
   "devDependencies": {
     "@commitlint/cli": "^18.4.4",
     "@commitlint/config-conventional": "^18.4.4",
+    "@nearform/sql": "^1.10.5",
+    "@types/node": "^20.10.6",
+    "c8": "^9.0.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "fastify": "^4.25.2",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
+    "mercurius": "^13.3.3",
+    "pg": "^8.11.3",
     "prettier": "^3.1.1"
   },
   "lint-staged": {
