@@ -1,6 +1,6 @@
 {
   "name": "relay-pagination-directive",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "GQL directive to simplify relay style pagination",
   "main": "index.js",
   "types": "index.d.ts",
@@ -31,7 +31,7 @@
     "@graphql-tools/schema": "^10.0.2",
     "@graphql-tools/utils": "^10.0.12",
     "@graphql-tools/wrap": "^10.0.1",
-    "graphql": "file:../../scratch/node_modules/graphql",
+    "graphql": "^16.8.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
