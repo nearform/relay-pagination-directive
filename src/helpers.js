@@ -1,6 +1,6 @@
 export const PAGINATION_MODE = {
   SIMPLE: 'simple',
-  EDGES: 'edges',
+  EDGES: 'edges'
 }
 
 export function encodeCursor(typeName, id) {
@@ -18,7 +18,7 @@ export function decodeCursor(cursor) {
 
   return {
     typeName,
-    id,
+    id
   }
 }
 
@@ -28,10 +28,10 @@ export function connectionFromArray(
   {
     paginationMode = PAGINATION_MODE.EDGES,
     edgeProps,
-    cursorPropOrFn = 'id',
+    cursorPropOrFn = 'id'
   } = {},
   pageInfoPartial,
-  connectionProps,
+  connectionProps
 ) {
   if (typeof first === 'number') {
     if (first < 0) {
@@ -54,16 +54,16 @@ export function connectionFromArray(
         startCursor: getCursor(slice[0]),
         endCursor: getCursor(slice[slice.length - 1]),
         hasPreviousPage: pageInfoPartial?.hasPreviousPage ?? !!after,
-        hasNextPage: pageInfoPartial?.hasNextPage ?? arrayItems.length >= first,
-      },
+        hasNextPage: pageInfoPartial?.hasNextPage ?? arrayItems.length >= first
+      }
     }
   }
 
-  const edges = slice.map((value, index) => {
+  const edges = slice.map(value => {
     return {
       ...(edgeProps && getEdgeProps(edgeProps, value)),
       cursor: getCursor(value),
-      node: value,
+      node: value
     }
   })
 
@@ -74,8 +74,8 @@ export function connectionFromArray(
       startCursor: edges[0].cursor,
       endCursor: edges[edges.length - 1].cursor,
       hasPreviousPage: pageInfoPartial?.hasPreviousPage ?? !!after,
-      hasNextPage: pageInfoPartial?.hasNextPage ?? arrayItems.length >= first,
-    },
+      hasNextPage: pageInfoPartial?.hasNextPage ?? arrayItems.length >= first
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-# relay-pagination
+# relay-pagination-directive
 
 This library provides a GQL directive to more easily implement pagination based on the Relay specification. The directive options allow you to decide how far you wish to go towards full [specification compliant pagination](https://relay.dev/graphql/connections.htm) as often full compliance can add overhead which may not be required in your application.
 

@@ -4,14 +4,13 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { connectionDirective } from '../connectionDirective.js'
-import { z } from 'zod'
 import { PAGINATION_MODE } from '../helpers.js'
 
 const getServer = async schema => {
   const app = fastify({ logger: false })
 
   await app.register(mercurius, {
-    schema,
+    schema
   })
 
   return app
@@ -21,8 +20,8 @@ const people = [
   {
     id: 1,
     name: 'Tom Hanks',
-    type: 'Actor',
-  },
+    type: 'Actor'
+  }
 ]
 
 const typeDefs = `
@@ -41,8 +40,8 @@ const resolvers = {
   Query: {
     people: () => {
       return people.slice()
-    },
-  },
+    }
+  }
 }
 
 test('default directive name', async () => {
@@ -50,7 +49,7 @@ test('default directive name', async () => {
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(schema)
@@ -59,7 +58,7 @@ test('default directive name', async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -70,8 +69,8 @@ test('default directive name', async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const directiveNames = res.json().data['__schema'].directives.map(d => d.name)
@@ -93,12 +92,12 @@ test('custom directive name', async () => {
 
   const { connectionDirectiveTypeDefs } = connectionDirective(
     undefined,
-    'myDirective',
+    'myDirective'
   )
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, customTypeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(schema)
@@ -107,7 +106,7 @@ test('custom directive name', async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -118,8 +117,8 @@ test('custom directive name', async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const directiveNames = res.json().data['__schema'].directives.map(d => d.name)
@@ -133,7 +132,7 @@ test('adds types for connection pattern', async () => {
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(connectionDirectiveTransformer(schema))
@@ -142,7 +141,7 @@ test('adds types for connection pattern', async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -153,8 +152,8 @@ test('adds types for connection pattern', async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const typeNames = res.json().data['__schema'].types.map(t => t.name)
@@ -171,7 +170,7 @@ test('updates the return type for tagged fields', async () => {
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(connectionDirectiveTransformer(schema))
@@ -180,7 +179,7 @@ test('updates the return type for tagged fields', async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -196,8 +195,8 @@ test('updates the return type for tagged fields', async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const peopleQuery = res
@@ -224,7 +223,7 @@ test('updates the query to include connection arguments', async () => {
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, customTypeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(connectionDirectiveTransformer(schema))
@@ -233,7 +232,7 @@ test('updates the query to include connection arguments', async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -247,8 +246,8 @@ test('updates the query to include connection arguments', async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const peopleQuery = res
@@ -258,7 +257,7 @@ test('updates the query to include connection arguments', async () => {
   assert.deepEqual(peopleQuery.args, [
     { name: 'type' },
     { name: 'first' },
-    { name: 'after' },
+    { name: 'after' }
   ])
 })
 
@@ -292,7 +291,7 @@ test("doesn't add types when they're added by the user", async () => {
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, customTypeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(connectionDirectiveTransformer(schema))
@@ -301,7 +300,7 @@ test("doesn't add types when they're added by the user", async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -315,8 +314,8 @@ test("doesn't add types when they're added by the user", async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const personConnection = res
@@ -345,13 +344,13 @@ test("doesn't add edge types when in simple mode", async () => {
   const { connectionDirectiveTypeDefs, connectionDirectiveTransformer } =
     connectionDirective({
       Person: {
-        paginationMode: PAGINATION_MODE.SIMPLE,
-      },
+        paginationMode: PAGINATION_MODE.SIMPLE
+      }
     })
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, customTypeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(connectionDirectiveTransformer(schema))
@@ -360,7 +359,7 @@ test("doesn't add edge types when in simple mode", async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -383,8 +382,8 @@ test("doesn't add edge types when in simple mode", async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const personConnection = res
@@ -425,14 +424,14 @@ test('allows custom connection properties', async () => {
     connectionDirective({
       Person: {
         connectionProps: {
-          totalCount: 'Int!',
-        },
-      },
+          totalCount: 'Int!'
+        }
+      }
     })
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, customTypeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(connectionDirectiveTransformer(schema))
@@ -441,7 +440,7 @@ test('allows custom connection properties', async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -455,17 +454,17 @@ test('allows custom connection properties', async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const { data } = res.json()
 
   const personConnection = data['__schema'].types.find(
-    t => t.name === 'PersonConnection',
+    t => t.name === 'PersonConnection'
   )
   const filmConnection = data['__schema'].types.find(
-    t => t.name === 'FilmConnection',
+    t => t.name === 'FilmConnection'
   )
 
   assert.ok(personConnection.fields.map(f => f.name).includes('totalCount'))
@@ -496,21 +495,21 @@ test('custom prefix', async () => {
     connectionDirective({
       Person: {
         connectionProps: {
-          totalCount: 'Int!',
-        },
+          totalCount: 'Int!'
+        }
       },
       Film: {
         edgeProps: {
           PersonFilm: {
-            roles: '[String!]!',
-          },
-        },
-      },
+            roles: '[String!]!'
+          }
+        }
+      }
     })
 
   const schema = makeExecutableSchema({
     typeDefs: [connectionDirectiveTypeDefs, customTypeDefs],
-    resolvers,
+    resolvers
   })
 
   const server = await getServer(connectionDirectiveTransformer(schema))
@@ -519,7 +518,7 @@ test('custom prefix', async () => {
     method: 'POST',
     url: '/graphql',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
     body: JSON.stringify({
       query: `
@@ -533,18 +532,18 @@ test('custom prefix', async () => {
             }
           }
         }
-      `,
-    }),
+      `
+    })
   })
 
   const { data } = res.json()
 
   const filmEdge = data['__schema'].types.find(t => t.name === 'FilmEdge')
   const personFilmConnection = data['__schema'].types.find(
-    t => t.name === 'PersonFilmConnection',
+    t => t.name === 'PersonFilmConnection'
   )
   const personFilmEdge = data['__schema'].types.find(
-    t => t.name === 'PersonFilmEdge',
+    t => t.name === 'PersonFilmEdge'
   )
 
   assert.ok(personFilmConnection)
@@ -553,49 +552,49 @@ test('custom prefix', async () => {
 })
 
 test('options validation', async t => {
-  await t.test('invalid pagination mode', t => {
+  await t.test('invalid pagination mode', () => {
     return assert.throws(() =>
       connectionDirective({
         foo: {
-          paginationMode: 'bar',
-        },
-      }),
+          paginationMode: 'bar'
+        }
+      })
     )
   })
 
-  await t.test('invalid edge props', t => {
+  await t.test('invalid edge props', () => {
     return assert.throws(() =>
       connectionDirective({
         foo: {
           edgeProps: {
-            fooLink: ['bar'],
-          },
-        },
-      }),
+            fooLink: ['bar']
+          }
+        }
+      })
     )
   })
 
-  await t.test('invalid connection props', async t => {
+  await t.test('invalid connection props', async () => {
     await assert.throws(() =>
       connectionDirective({
         foo: {
-          connectionProps: ['bar'],
-        },
-      }),
+          connectionProps: ['bar']
+        }
+      })
     )
 
     await assert.throws(() =>
       connectionDirective({
         foo: {
           connectionProps: {
-            fooLink: ['bar'],
-          },
-        },
-      }),
+            fooLink: ['bar']
+          }
+        }
+      })
     )
   })
 
-  await t.test('valid options', async t => {
+  await t.test('valid options', async () => {
     assert.ok(() =>
       connectionDirective({
         foo: {
@@ -604,17 +603,17 @@ test('options validation', async t => {
           connectionProps: {
             totalCount: 'Int!',
             FooLink: {
-              bar: 'Int',
-            },
+              bar: 'Int'
+            }
           },
           edgeProps: {
             relationship: 'String!',
             FooLink: {
-              type: 'String!',
-            },
-          },
-        },
-      }),
+              type: 'String!'
+            }
+          }
+        }
+      })
     )
   })
 })
@@ -624,25 +623,25 @@ test('response formatting', async t => {
     connectionDirective({
       Person: {
         connectionProps: {
-          totalCount: 'Int',
+          totalCount: 'Int'
         },
         edgeProps: {
-          roles: '[String!]',
-        },
-      },
+          roles: '[String!]'
+        }
+      }
     })
 
-  await t.test('invalid resolver response', async t => {
+  await t.test('invalid resolver response', async () => {
     const customResolvers = {
       Query: {
         people: () => {
           return 'foobar'
-        },
-      },
+        }
+      }
     }
     const schema = makeExecutableSchema({
       typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-      resolvers: customResolvers,
+      resolvers: customResolvers
     })
 
     const server = await getServer(connectionDirectiveTransformer(schema))
@@ -651,7 +650,7 @@ test('response formatting', async t => {
       method: 'POST',
       url: '/graphql',
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
         query: `
@@ -672,20 +671,20 @@ test('response formatting', async t => {
               }
             }
           }
-        `,
-      }),
+        `
+      })
     })
     const { data, errors } = res.json()
     assert.equal(data, null)
     assert.equal(
       errors?.[0].message,
-      'Connection responses must be an array or object',
+      'Connection responses must be an array or object'
     )
   })
-  await t.test('when returning an array from the resolver', async t => {
+  await t.test('when returning an array from the resolver', async () => {
     const schema = makeExecutableSchema({
       typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-      resolvers,
+      resolvers
     })
 
     const server = await getServer(connectionDirectiveTransformer(schema))
@@ -694,7 +693,7 @@ test('response formatting', async t => {
       method: 'POST',
       url: '/graphql',
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
         query: `
@@ -715,8 +714,8 @@ test('response formatting', async t => {
               }
             }
           }
-        `,
-      }),
+        `
+      })
     })
 
     assert.deepEqual(res.json(), {
@@ -727,43 +726,43 @@ test('response formatting', async t => {
               cursor: '1',
               node: {
                 id: '1',
-                name: 'Tom Hanks',
-              },
-            },
+                name: 'Tom Hanks'
+              }
+            }
           ],
           pageInfo: {
             endCursor: '1',
             hasNextPage: true,
             hasPreviousPage: false,
-            startCursor: '1',
-          },
-        },
-      },
+            startCursor: '1'
+          }
+        }
+      }
     })
   })
 
-  await t.test('when returning an object from the resolver', async t => {
+  await t.test('when returning an object from the resolver', async () => {
     const customResolvers = {
       Query: {
         people: () => {
           return {
             edges: people.slice().map(p => ({
               ...p,
-              roles: ['foobar'],
+              roles: ['foobar']
             })),
             totalCount: 3,
             pageInfo: {
               hasNextPage: true,
-              hasPreviousPage: true,
-            },
+              hasPreviousPage: true
+            }
           }
-        },
-      },
+        }
+      }
     }
 
     const schema = makeExecutableSchema({
       typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-      resolvers: customResolvers,
+      resolvers: customResolvers
     })
 
     const server = await getServer(connectionDirectiveTransformer(schema))
@@ -772,7 +771,7 @@ test('response formatting', async t => {
       method: 'POST',
       url: '/graphql',
       headers: {
-        'content-type': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
         query: `
@@ -795,8 +794,8 @@ test('response formatting', async t => {
               }
             }
           }
-        `,
-      }),
+        `
+      })
     })
 
     assert.deepEqual(res.json(), {
@@ -809,18 +808,18 @@ test('response formatting', async t => {
               roles: ['foobar'],
               node: {
                 id: '1',
-                name: 'Tom Hanks',
-              },
-            },
+                name: 'Tom Hanks'
+              }
+            }
           ],
           pageInfo: {
             endCursor: '1',
             hasNextPage: true,
             hasPreviousPage: true,
-            startCursor: '1',
-          },
-        },
-      },
+            startCursor: '1'
+          }
+        }
+      }
     })
   })
 })

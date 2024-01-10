@@ -5,7 +5,7 @@ import {
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLNonNull,
-  defaultFieldResolver,
+  defaultFieldResolver
 } from 'graphql'
 import { PAGINATION_MODE, connectionFromArray } from './helpers.js'
 import { z } from 'zod'
@@ -14,22 +14,22 @@ const typeOptionsMapValidator = z.record(
   z.string(),
   z.object({
     paginationMode: z.optional(
-      z.enum(Object.values(PAGINATION_MODE)).default(PAGINATION_MODE.EDGES),
+      z.enum(Object.values(PAGINATION_MODE)).default(PAGINATION_MODE.EDGES)
     ),
     cursorPropOrFn: z.optional(z.union([z.string().min(1), z.function()])),
     connectionProps: z.optional(z.record(z.string(), z.string())),
     edgeProps: z.optional(
       z.record(
         z.string(),
-        z.union([z.string(), z.record(z.string(), z.string())]),
-      ),
-    ),
-  }),
+        z.union([z.string(), z.record(z.string(), z.string())])
+      )
+    )
+  })
 )
 
 export function connectionDirective(
   typeOptionsMap = {},
-  directiveName = 'connection',
+  directiveName = 'connection'
 ) {
   const options = typeOptionsMapValidator.parse(typeOptionsMap)
 
@@ -49,7 +49,7 @@ export function connectionDirective(
           const directive = getDirective(
             schema,
             fieldConfig,
-            directiveName,
+            directiveName
           )?.[0]
 
           if (directive) {
@@ -60,12 +60,12 @@ export function connectionDirective(
             connectionTypes[getTypeKey(typeName, fieldName)] = {
               typeName: match[0],
               resolver: fieldConfig.resolve ?? defaultFieldResolver,
-              prefix: directive['prefix'] ?? match[0],
+              prefix: directive['prefix'] ?? match[0]
             }
           }
 
           return fieldConfig
-        },
+        }
       })
 
       if (!existingTypes['PageInfo']) {
@@ -116,7 +116,7 @@ export function connectionDirective(
 
       schema = mergeSchemas({
         schemas: [schema],
-        typeDefs: newTypes,
+        typeDefs: newTypes
       })
 
       return wrapSchema({
@@ -128,7 +128,7 @@ export function connectionDirective(
             const {
               typeName: baseType,
               prefix,
-              resolver: originalResolver,
+              resolver: originalResolver
             } = connectionTypes[typeKey]
             const typeOptions = options[baseType]
 
@@ -137,7 +137,7 @@ export function connectionDirective(
 
             fieldConfig.args = {
               ...fieldConfig.args,
-              ...getConnectionArgs(),
+              ...getConnectionArgs()
             }
 
             fieldConfig.resolve = async (root, args, ctx, info) => {
@@ -149,7 +149,7 @@ export function connectionDirective(
 
               if (typeof res !== 'object') {
                 throw new Error(
-                  'Connection responses must be an array or object',
+                  'Connection responses must be an array or object'
                 )
               }
 
@@ -163,15 +163,15 @@ export function connectionDirective(
                 args,
                 typeOptions,
                 pageInfo,
-                connectionProps,
+                connectionProps
               )
             }
 
             return fieldConfig
-          }),
-        ],
+          })
+        ]
       })
-    },
+    }
   }
 }
 
@@ -183,8 +183,8 @@ function getConnectionType(typeName) {
   return new GraphQLNonNull(
     new GraphQLObjectType({
       name: `${typeName}Connection`,
-      fields: {},
-    }),
+      fields: {}
+    })
   )
 }
 
@@ -192,14 +192,14 @@ function getConnectionArgs() {
   return {
     first: {
       type: new GraphQLScalarType({
-        name: 'Int',
-      }),
+        name: 'Int'
+      })
     },
     after: {
       type: new GraphQLScalarType({
-        name: 'ID',
-      }),
-    },
+        name: 'ID'
+      })
+    }
   }
 }
 
@@ -209,7 +209,7 @@ function mapAdditionalProps(additionalProps, subKey) {
     return mapAdditionalProps(additionalProps[subKey])
   }
   return Object.entries(additionalProps)
-    .filter(([_, val]) => typeof val === 'string')
+    .filter(([, val]) => typeof val === 'string')
     .map(([key, val]) => `${key}: ${val}`)
     .join('\n')
 }

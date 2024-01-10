@@ -5,7 +5,7 @@ import {
   PAGINATION_MODE,
   connectionFromArray,
   decodeCursor,
-  encodeCursor,
+  encodeCursor
 } from '../helpers.js'
 
 test('encode creates a base64 string from provided values', () => {
@@ -16,14 +16,14 @@ test('encode creates a base64 string from provided values', () => {
 test('decodeCursor', async t => {
   await t.test('with invalid string', () => {
     assert.throws(() => decodeCursor('foo'), {
-      message: 'Invalid cursor provided',
+      message: 'Invalid cursor provided'
     })
   })
 
   await t.test('with valid string', () => {
     assert.deepEqual(decodeCursor(encodeCursor('foo', '1234')), {
       typeName: 'foo',
-      id: '1234',
+      id: '1234'
     })
   })
 })
@@ -32,12 +32,12 @@ test('connectionFromArray', async t => {
   const data = () => [
     { id: 10001, otherId: 8001, name: 'foo' },
     { id: 10002, otherId: 8002, name: 'bar' },
-    { id: 10003, otherId: 8003, name: 'baz' },
+    { id: 10003, otherId: 8003, name: 'baz' }
   ]
 
   await t.test('with a negative first value', () => {
     assert.throws(() => connectionFromArray(data(), { first: -1 }), {
-      message: 'Argument "first" must be a non-negative integer',
+      message: 'Argument "first" must be a non-negative integer'
     })
   })
 
@@ -46,19 +46,19 @@ test('connectionFromArray', async t => {
       edges: [
         {
           cursor: 10001,
-          node: { id: 10001, otherId: 8001, name: 'foo' },
+          node: { id: 10001, otherId: 8001, name: 'foo' }
         },
         {
           cursor: 10002,
-          node: { id: 10002, otherId: 8002, name: 'bar' },
-        },
+          node: { id: 10002, otherId: 8002, name: 'bar' }
+        }
       ],
       pageInfo: {
         startCursor: 10001,
         endCursor: 10002,
         hasPreviousPage: true,
-        hasNextPage: true,
-      },
+        hasNextPage: true
+      }
     })
   })
 
@@ -67,26 +67,26 @@ test('connectionFromArray', async t => {
       connectionFromArray(
         data(),
         { first: 2, after: 1 },
-        { cursorPropOrFn: 'otherId' },
+        { cursorPropOrFn: 'otherId' }
       ),
       {
         edges: [
           {
             cursor: 8001,
-            node: { id: 10001, otherId: 8001, name: 'foo' },
+            node: { id: 10001, otherId: 8001, name: 'foo' }
           },
           {
             cursor: 8002,
-            node: { id: 10002, otherId: 8002, name: 'bar' },
-          },
+            node: { id: 10002, otherId: 8002, name: 'bar' }
+          }
         ],
         pageInfo: {
           startCursor: 8001,
           endCursor: 8002,
           hasPreviousPage: true,
-          hasNextPage: true,
-        },
-      },
+          hasNextPage: true
+        }
+      }
     )
   })
 
@@ -95,26 +95,26 @@ test('connectionFromArray', async t => {
       connectionFromArray(
         data(),
         { first: 2, after: 1 },
-        { cursorPropOrFn: val => val.name },
+        { cursorPropOrFn: val => val.name }
       ),
       {
         edges: [
           {
             cursor: 'foo',
-            node: { id: 10001, otherId: 8001, name: 'foo' },
+            node: { id: 10001, otherId: 8001, name: 'foo' }
           },
           {
             cursor: 'bar',
-            node: { id: 10002, otherId: 8002, name: 'bar' },
-          },
+            node: { id: 10002, otherId: 8002, name: 'bar' }
+          }
         ],
         pageInfo: {
           startCursor: 'foo',
           endCursor: 'bar',
           hasPreviousPage: true,
-          hasNextPage: true,
-        },
-      },
+          hasNextPage: true
+        }
+      }
     )
   })
 
@@ -123,20 +123,20 @@ test('connectionFromArray', async t => {
       connectionFromArray(
         data(),
         { first: 2, after: 1 },
-        { paginationMode: PAGINATION_MODE.SIMPLE },
+        { paginationMode: PAGINATION_MODE.SIMPLE }
       ),
       {
         edges: [
           { id: 10001, otherId: 8001, name: 'foo' },
-          { id: 10002, otherId: 8002, name: 'bar' },
+          { id: 10002, otherId: 8002, name: 'bar' }
         ],
         pageInfo: {
           startCursor: 10001,
           endCursor: 10002,
           hasPreviousPage: true,
-          hasNextPage: true,
-        },
-      },
+          hasNextPage: true
+        }
+      }
     )
   })
 
@@ -146,34 +146,34 @@ test('connectionFromArray', async t => {
         data(),
         {
           first: 2,
-          after: 1,
+          after: 1
         },
         {
           edgeProps: {
-            otherId: 'Int',
-          },
-        },
+            otherId: 'Int'
+          }
+        }
       ),
       {
         edges: [
           {
             cursor: 10001,
             otherId: 8001,
-            node: { id: 10001, name: 'foo' },
+            node: { id: 10001, name: 'foo' }
           },
           {
             cursor: 10002,
             otherId: 8002,
-            node: { id: 10002, name: 'bar' },
-          },
+            node: { id: 10002, name: 'bar' }
+          }
         ],
         pageInfo: {
           startCursor: 10001,
           endCursor: 10002,
           hasPreviousPage: true,
-          hasNextPage: true,
-        },
-      },
+          hasNextPage: true
+        }
+      }
     )
   })
 
@@ -182,19 +182,19 @@ test('connectionFromArray', async t => {
       edges: [
         {
           cursor: 10001,
-          node: { id: 10001, otherId: 8001, name: 'foo' },
+          node: { id: 10001, otherId: 8001, name: 'foo' }
         },
         {
           cursor: 10002,
-          node: { id: 10002, otherId: 8002, name: 'bar' },
-        },
+          node: { id: 10002, otherId: 8002, name: 'bar' }
+        }
       ],
       pageInfo: {
         startCursor: 10001,
         endCursor: 10002,
         hasPreviousPage: false,
-        hasNextPage: true,
-      },
+        hasNextPage: true
+      }
     })
   })
 
@@ -203,23 +203,23 @@ test('connectionFromArray', async t => {
       edges: [
         {
           cursor: 10001,
-          node: { id: 10001, otherId: 8001, name: 'foo' },
+          node: { id: 10001, otherId: 8001, name: 'foo' }
         },
         {
           cursor: 10002,
-          node: { id: 10002, otherId: 8002, name: 'bar' },
+          node: { id: 10002, otherId: 8002, name: 'bar' }
         },
         {
           cursor: 10003,
-          node: { id: 10003, otherId: 8003, name: 'baz' },
-        },
+          node: { id: 10003, otherId: 8003, name: 'baz' }
+        }
       ],
       pageInfo: {
         startCursor: 10001,
         endCursor: 10003,
         hasPreviousPage: false,
-        hasNextPage: false,
-      },
+        hasNextPage: false
+      }
     })
   })
 
@@ -227,30 +227,30 @@ test('connectionFromArray', async t => {
     assert.deepEqual(
       connectionFromArray(data(), { first: 100 }, undefined, {
         hasNextPage: true,
-        hasPreviousPage: true,
+        hasPreviousPage: true
       }),
       {
         edges: [
           {
             cursor: 10001,
-            node: { id: 10001, otherId: 8001, name: 'foo' },
+            node: { id: 10001, otherId: 8001, name: 'foo' }
           },
           {
             cursor: 10002,
-            node: { id: 10002, otherId: 8002, name: 'bar' },
+            node: { id: 10002, otherId: 8002, name: 'bar' }
           },
           {
             cursor: 10003,
-            node: { id: 10003, otherId: 8003, name: 'baz' },
-          },
+            node: { id: 10003, otherId: 8003, name: 'baz' }
+          }
         ],
         pageInfo: {
           startCursor: 10001,
           endCursor: 10003,
           hasPreviousPage: true,
-          hasNextPage: true,
-        },
-      },
+          hasNextPage: true
+        }
+      }
     )
   })
 })

@@ -15,15 +15,15 @@ const pool = new pg.Pool({
   post: '5432',
   user: 'docker',
   password: 'docker',
-  database: 'docker',
+  database: 'docker'
 })
 
 const typeConnectionMap = {
   Film: {
     edgeProps: {
-      PeopleFilm: { roles: '[String!]!', performance: 'Int!' },
-    },
-  },
+      PeopleFilm: { roles: '[String!]!', performance: 'Int!' }
+    }
+  }
 }
 
 const { connectionDirectiveTypeDefs, connectionDirectiveTransformer } =
@@ -55,7 +55,7 @@ const resolvers = {
       const query = SQL`
         select *
         from people
-        ${ after ? SQL`where id > ${after}` : SQL``}
+        ${after ? SQL`where id > ${after}` : SQL``}
         order by id
         limit ${first}`
       const res = await pool.query(query.text, query.values)
@@ -71,7 +71,7 @@ const resolvers = {
           *,
           count(*) over () as remaining_count
         from films
-        ${ after ? SQL`where id > ${after}` : SQL``}
+        ${after ? SQL`where id > ${after}` : SQL``}
         order by id
         limit ${first}`
       const res = await pool.query(query.text, query.values)
@@ -85,7 +85,7 @@ const resolvers = {
           hasNextPage: res.rows?.[0].remaining_count > first
         }
       }
-    },
+    }
   },
   People: {
     films: async (root, { first, after }) => {
@@ -94,7 +94,7 @@ const resolvers = {
         from people_films pf
         join films f on f.id = pf.film_id
         where pf.people_id = ${root.id}
-        ${ after ? SQL`and f.id > ${after}` : SQL``}
+        ${after ? SQL`and f.id > ${after}` : SQL``}
         order by f.id
         limit ${first + 1}`
       const res = await pool.query(query.text, query.values)
@@ -110,20 +110,20 @@ const resolvers = {
           hasNextPage: res.rows.length > first
         }
       }
-    },
-  },
+    }
+  }
 }
 
 const schema = makeExecutableSchema({
   typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-  resolvers,
+  resolvers
 })
 
 const connectionSchema = connectionDirectiveTransformer(schema)
 
 app.register(mercurius, {
   schema: connectionSchema,
-  graphiql: true,
+  graphiql: true
 })
 
 await app.listen({ port: 3000 })

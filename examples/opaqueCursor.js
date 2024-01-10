@@ -15,16 +15,16 @@ const pool = new pg.Pool({
   post: '5432',
   user: 'docker',
   password: 'docker',
-  database: 'docker',
+  database: 'docker'
 })
 
 const typeConnectionMap = {
   Film: {
-    cursorPropOrFn: (val) => encodeCursor('Film', val.id),
+    cursorPropOrFn: val => encodeCursor('Film', val.id)
   },
   People: {
-    cursorPropOrFn: (val) => encodeCursor('People', val.id),
-  },
+    cursorPropOrFn: val => encodeCursor('People', val.id)
+  }
 }
 
 const { connectionDirectiveTypeDefs, connectionDirectiveTransformer } =
@@ -64,7 +64,7 @@ const resolvers = {
       const query = SQL`
         select *
         from films
-        ${ afterId ? SQL`where id > ${afterId}` : SQL``}
+        ${afterId ? SQL`where id > ${afterId}` : SQL``}
         order by id
         limit ${first + 1}`
 
@@ -102,25 +102,25 @@ const resolvers = {
       const res = await pool.query(query.text, query.values)
 
       return res.rows?.[0]
-    },
-  },
-  AllTypes: {
-    __resolveType: (obj) => {
-      return obj.type_name && obj.type_name
     }
   },
+  AllTypes: {
+    __resolveType: obj => {
+      return obj.type_name && obj.type_name
+    }
+  }
 }
 
 const schema = makeExecutableSchema({
   typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-  resolvers,
+  resolvers
 })
 
 const connectionSchema = connectionDirectiveTransformer(schema)
 
 app.register(mercurius, {
   schema: connectionSchema,
-  graphiql: true,
+  graphiql: true
 })
 
 await app.listen({ port: 3000 })

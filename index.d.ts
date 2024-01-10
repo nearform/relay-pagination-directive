@@ -16,10 +16,10 @@ type PageInfo = {
   hasNextPage: boolean
 }
 
-export const PAGINATION_MODE = {
-  SIMPLE: 'simple',
-  EDGES: 'edges',
-} as const
+export enum PAGINATION_MODE {
+  SIMPLE = 'simple',
+  EDGES = 'edges',
+}
 
 export type ConnectionResolverResponse<TArrayItem> = {
   edges: {

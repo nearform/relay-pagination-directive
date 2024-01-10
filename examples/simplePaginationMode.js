@@ -16,7 +16,7 @@ const pool = new pg.Pool({
   post: '5432',
   user: 'docker',
   password: 'docker',
-  database: 'docker',
+  database: 'docker'
 })
 
 const { connectionDirectiveTypeDefs, connectionDirectiveTransformer } =
@@ -44,27 +44,27 @@ const resolvers = {
       const query = SQL`
         select *
         from people
-        ${ after ? SQL`where id > ${after}` : SQL``}
+        ${after ? SQL`where id > ${after}` : SQL``}
         order by id
         limit ${first}`
 
       const res = await pool.query(query.text, query.values)
 
       return res.rows
-    },
+    }
   }
 }
 
 const schema = makeExecutableSchema({
   typeDefs: [connectionDirectiveTypeDefs, typeDefs],
-  resolvers,
+  resolvers
 })
 
 const connectionSchema = connectionDirectiveTransformer(schema)
 
 app.register(mercurius, {
   schema: connectionSchema,
-  graphiql: true,
+  graphiql: true
 })
 
 await app.listen({ port: 3000 })
