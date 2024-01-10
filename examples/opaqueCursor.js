@@ -14,7 +14,8 @@ const pool = new pg.Pool({
   host: 'localhost',
   post: '5432',
   user: 'docker',
-  database: 'test_db',
+  password: 'docker',
+  database: 'docker',
 })
 
 const typeConnectionMap = {
