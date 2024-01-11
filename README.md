@@ -367,8 +367,8 @@ For each type marked with the `@connection` directive, you're able to specify th
   {
     edges: results,
     pageInfo: {
-      startCursor: 1, // Cursors are still generated depending on the cursor config
-      endCursor: 2,
+      startCursor: 'RmlsbTox', // Cursors are still generated depending on the cursor config
+      endCursor: 'RmlsbToy',
       ...
     }
   }
@@ -386,8 +386,8 @@ For each type marked with the `@connection` directive, you're able to specify th
       },
     ],
     pageInfo: {
-      startCursor: 1, // Cursors are still generated depending on the cursor config
-      endCursor: 2,
+      startCursor: 'RmlsbTox', // Cursors are still generated depending on the cursor config
+      endCursor: 'RmlsbToy',
       ...
     }
   }
@@ -401,7 +401,8 @@ For each type marked with the `@connection` directive, you're able to specify th
 
 - `typeOptionsMap` - _object (optional)_ - Map of GQL types (types with the `@connection` directive) and their configuration to support the pagination process
   - `paginationMode` - _string<'simple' | 'edges'> (optional)_ - when using simple pagination mode the results array will be added to `connection.edges` without any adjustments i.e. the edge relationship will be removed and no cursor mapping will occur, cursors will still be generated for the `startCursor` and `endCursor` values.
-  - `cursorPropOrFn` - _string|function(optional)_ - By default, the `id` property of an item will be used as its cursor value, however, it is recommended that cursors should be opaque string values. This option allows you to provide a different property name to use for the cursor value or a function that will be passed the item and should return a string cursor value. `encodeCursor` and `decodeCursor` functions helpers and provided to assist with this. [Full example](./examples/opaqueCursor.js)
+  - `encodeCursor` - _boolean_ - Should cursor values be encoded to base64, defaults to true. *Note* This value is ignored when a cursor function is provided.
+  - `cursorPropOrFn` - _string|function(optional)_ - By default, the `id` property of an item will be used as its cursor value, however, it is recommended that cursors should be opaque string values. This option allows you to provide a different property name to use for the cursor value or a function that will be passed the base type and item and should return a string cursor value. `encodeCursor` and `decodeCursor` functions helpers are provided to assist with this. [Full example](./examples/opaqueCursor.js)
   - connectionProps - _object(optional)_ - An object will key/values representing GQL type props that should be added to the generated connection type. Nested objects can be used to configure directives given custom names.
   - edgeProps - _object(optional)_ - An object will key/values representing GQL type props that should be added to the generated edge type. Nested objects can be used to configure directives given custom names.
 - `directiveName` - _string (optional, defaults to 'connection')_ - Custom name to be used for the directive

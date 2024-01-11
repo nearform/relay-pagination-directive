@@ -154,11 +154,12 @@ export function connectionDirective(
               }
 
               if (Array.isArray(res))
-                return connectionFromArray(res, args, typeOptions)
+                return connectionFromArray(baseType, res, args, typeOptions)
 
               const { edges, pageInfo, ...connectionProps } = res
 
               return connectionFromArray(
+                baseType,
                 edges,
                 args,
                 typeOptions,

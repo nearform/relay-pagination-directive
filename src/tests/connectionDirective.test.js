@@ -723,7 +723,7 @@ test('response formatting', async t => {
         people: {
           edges: [
             {
-              cursor: '1',
+              cursor: 'UGVyc29uOjE=',
               node: {
                 id: '1',
                 name: 'Tom Hanks'
@@ -731,10 +731,10 @@ test('response formatting', async t => {
             }
           ],
           pageInfo: {
-            endCursor: '1',
+            endCursor: 'UGVyc29uOjE=',
             hasNextPage: true,
             hasPreviousPage: false,
-            startCursor: '1'
+            startCursor: 'UGVyc29uOjE='
           }
         }
       }
@@ -804,7 +804,7 @@ test('response formatting', async t => {
           totalCount: 3,
           edges: [
             {
-              cursor: '1',
+              cursor: 'UGVyc29uOjE=',
               roles: ['foobar'],
               node: {
                 id: '1',
@@ -813,10 +813,10 @@ test('response formatting', async t => {
             }
           ],
           pageInfo: {
-            endCursor: '1',
+            endCursor: 'UGVyc29uOjE=',
             hasNextPage: true,
             hasPreviousPage: true,
-            startCursor: '1'
+            startCursor: 'UGVyc29uOjE='
           }
         }
       }
