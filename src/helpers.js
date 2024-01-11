@@ -23,11 +23,13 @@ export function decodeCursor(cursor) {
 }
 
 export function connectionFromArray(
+  baseType,
   arrayItems,
   { first, after }, // per request args
   {
     paginationMode = PAGINATION_MODE.EDGES,
     edgeProps,
+    encodeCursor = true,
     cursorPropOrFn = 'id'
   } = {},
   pageInfoPartial,
@@ -43,7 +45,8 @@ export function connectionFromArray(
 
   const getCursor =
     typeof cursorPropOrFn === 'string'
-      ? val => val[cursorPropOrFn]
+      ? (type, val) =>
+          defaultEncodeCursorFn(type, val, cursorPropOrFn, encodeCursor)
       : cursorPropOrFn
 
   if (paginationMode === PAGINATION_MODE.SIMPLE) {
@@ -51,8 +54,8 @@ export function connectionFromArray(
       ...connectionProps,
       edges: slice,
       pageInfo: {
-        startCursor: getCursor(slice[0]),
-        endCursor: getCursor(slice[slice.length - 1]),
+        startCursor: getCursor(baseType, slice[0]),
+        endCursor: getCursor(baseType, slice[slice.length - 1]),
         hasPreviousPage: pageInfoPartial?.hasPreviousPage ?? !!after,
         hasNextPage: pageInfoPartial?.hasNextPage ?? arrayItems.length >= first
       }
@@ -62,7 +65,7 @@ export function connectionFromArray(
   const edges = slice.map(value => {
     return {
       ...(edgeProps && getEdgeProps(edgeProps, value)),
-      cursor: getCursor(value),
+      cursor: getCursor(baseType, value),
       node: value
     }
   })
@@ -86,4 +89,10 @@ function getEdgeProps(edgeProps, val) {
     delete val[prop]
   }
   return props
+}
+
+function defaultEncodeCursorFn(typeName, val, cursorProp, shouldEncode) {
+  if (!shouldEncode) return val[cursorProp]
+
+  return encodeCursor(typeName, val[cursorProp])
 }

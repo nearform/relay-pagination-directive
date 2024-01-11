@@ -20,10 +20,15 @@ const pool = new pg.Pool({
 
 const typeConnectionMap = {
   Film: {
-    cursorPropOrFn: val => encodeCursor('Film', val.id)
+    // This is the default implemetation when `encodeCursor` is true
+    cursorPropOrFn: (baseType, val) => encodeCursor(baseType, val.id)
   },
   People: {
-    cursorPropOrFn: val => encodeCursor('People', val.id)
+    // If you have some specific sorting you may wish to encode multiple
+    // values in the cursor
+    cursorPropOrFn: (baseType, val) => {
+      return encodeCursor(baseType, `${val.id}:${val.otherId}`)
+    }
   }
 }
 

@@ -32,6 +32,7 @@ export type ConnectionResolverResponse<TArrayItem> = {
 type ConnectionProperties = {
   [typeName: string]: {
     paginationMode: 'simple' | 'edges'
+    encodeCursor: boolean
     cursorPropOrFn?: string | ((item: unknown[]) => string)
     connectionProps?: Record<string, string | Record<string, string>>
     edgeProps?: Record<string, string | Record<string, string>>
