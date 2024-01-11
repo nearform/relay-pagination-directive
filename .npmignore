@@ -1,0 +1,11 @@
+.husky/
+examples/
+**/tests/
+scripts/
+.c8rc
+.commitlintrc
+.eslintrc
+.gitignore
+.npmrc
+.prettierrc
+compose.yml
