@@ -4,7 +4,7 @@ This library provides a GQL directive to more easily implement pagination based 
 
 ## What / why?
 
-Cursor-based pagination, the style implemented by the Relay specific, involves wrapping a dataset in a `connection` object which presents your dataset items as a collection of `edges`. When making your query you provide a `first` (page size) value and an optional `after` value. `first` sets the number of items to return and `after` sets the start point for item selection. For example, given 100 records with sequential IDs, your initial query could include a `first` value of 10 and the second query would include 10 as the `after` value (the id of the last item in the first page).
+Cursor-based pagination, the style implemented by the Relay specific, involves wrapping a dataset in a `connection` object which presents your dataset items as a collection of `edges`. When making your query you provide a `first` (page size) value and an optional `after` value. `first` sets the number of items to return and `after` sets the start point for item selection. For example, given 100 records with sequential IDs, your initial query could include a `first` value of 10 and the second query would include 10 as the `after` value (the `id` of the last item on the first page).
 
 To support this pattern in GQL we need to
 
@@ -18,11 +18,11 @@ This library aims to reduce this overhead by providing a GQL directive that allo
 ## Install
 
 ```
-yarn add relay-pagination
+yarn add relay-pagination-directive
 # or
-npm i relay-pagination
+npm i relay-pagination-directive
 # or
-pnpm add relay-pagination
+pnpm add relay-pagination-directive
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ Annotate any types you wish to paginate with the `@connection` directive. Apply 
 
 const Fastify = require("fastify");
 const mercurius = require("..");
-const { connectionDirective } = require('relay-pagination')
+const { connectionDirective } = require('relay-pagination-directive')
 
 const app = Fastify();
 
@@ -187,7 +187,7 @@ const resolvers = {
 
 ### Custom Connection/Edge properties
 
-Often it is desirable to add additional properties to our connection and/or edge objects. This is possible using the `typeOptionsMap` config object. This is a mapping of the base type name to the configuration detail. For example if we wanted to add a `totalCount` property.
+Often it is desirable to add additional properties to our connection and/or edge objects. This is possible using the `typeOptionsMap` config object. This is a mapping of the base type name to the configuration detail. For example, if we wanted to add a `totalCount` property.
 
 ```js
 ...
@@ -436,12 +436,12 @@ An object with the following properties
 
 ## `hasNextPage` Strategies
 
-The intention of the `pageInfo.hasNextPage` property is to indicate to the consuming application whether it needs to query for subsequent pages of results. By default, this library will set this value to true if the data set returned from your resolver has the same length as the `first` argument. Depending on your use case this could be enough for you. For example, in a scenario where you're using pagination to load a large dataset and your UI does not display page numbers having another page is not a problem. However if your pagination is enabling some `Next` style UI button this would be bad as the user could click next and receive a blank page.
+The intention of the `pageInfo.hasNextPage` property is to indicate to the consuming application whether it needs to query for subsequent pages of results. By default, this library will set this value to true if the data set returned from your resolver has the same length as the `first` argument. Depending on your use case this could be enough for you. For example, in a scenario where you're using pagination to load a large dataset and your UI does not display page numbers having another page is not a problem. However, if your pagination is enabling some `Next` style UI button this would be bad as the user could click next and receive a blank page.
 
 These are two additional strategies that can be used to generate your own `hasNextPage` value and provide it in the resolver response.
 
-- The simplest and lowest overhead option is to simply add 1 to the received `first` value e.g. if 100 items are requested, query your DB for 101. You'll then known if 101 records are returned that there is at least 1 more page.
-- A window function can be added to you SQL query to retrieve the total (remaining) records found by a query. Most DB products support window functions and with a simple count, we can retrieve the total number of records. You can then infer that if the total remaining count is greater than the request page size that there are more pages.
+- The simplest and lowest overhead option is to simply add 1 to the received `first` value e.g. if 100 items are requested, query your DB for 101. You'll then know if 101 records are returned that there is at least 1 more page.
+- A window function can be added to your SQL query to retrieve the total (remaining) records found by a query. Most DB products support window functions and with a simple count, we can retrieve the total number of records. You can then infer that if the total remaining count is greater than the requested page size there are more pages.
 
 You can view full examples of all three strategies in [this example](./examples/hasNextPageStrategies.js)
 

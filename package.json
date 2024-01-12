@@ -7,9 +7,8 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "node --test src/",
+    "test": "c8 node --test src/",
     "test:watch": "c8 node --test --watch src/",
-    "coverage": "c8 npm run test",
     "prepare": "husky install"
   },
   "repository": {
@@ -22,7 +21,7 @@
     "pagination"
   ],
   "author": "Luke Jones",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/nearform/relay-pagination-directive/issues"
   },
