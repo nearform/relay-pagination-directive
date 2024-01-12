@@ -1,6 +1,6 @@
 {
   "name": "relay-pagination-directive",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "GQL directive to simplify relay style pagination",
   "main": "index.js",
   "types": "index.d.ts",
