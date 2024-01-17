@@ -4,7 +4,7 @@ This library provides a GQL directive to more easily implement pagination based 
 
 ## What / why?
 
-Cursor-based pagination, the style implemented by the Relay specific, involves wrapping a dataset in a `connection` object which presents your dataset items as a collection of `edges`. When making your query you provide a `first` (page size) value and an optional `after` value. `first` sets the number of items to return and `after` sets the start point for item selection. For example, given 100 records with sequential IDs, your initial query could include a `first` value of 10 and the second query would include 10 as the `after` value (the `id` of the last item on the first page).
+Cursor-based pagination, the style implemented by Relay specifically, involves wrapping a dataset in a `connection` object which presents your dataset items as a collection of `edges`. When making your query you provide a `first` (page size) value and an optional `after` value. `first` sets the number of items to return and `after` sets the start point for item selection. For example, given 100 records with sequential IDs, your initial query could include a `first` value of 10 and the second query would include 10 as the `after` value (the `id` of the last item on the first page).
 
 To support this pattern in GQL we need to
 
