@@ -25,7 +25,7 @@ export type ConnectionResolverResponse<TArrayItem> = {
   edges: {
     cursor: string
     node: TArrayItem
-  }
+  }[]
   pageInfo: PageInfo
 }
 
