@@ -75,7 +75,7 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    dogs(_, { first, after })
+    dogs: (_, { first, after }) => {
       const results = dogs
         .sort((a, b) => {
           return a.id - b.id
@@ -83,8 +83,8 @@ const resolvers = {
         .filter((dog) => (after ? dog.id > after : true))
         .slice(0, first)
 
-      return dogs
-    ,
+      return results
+    },
   },
 };
 
