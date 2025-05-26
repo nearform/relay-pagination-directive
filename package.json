@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "c8 node --test src/",
+    "test": "c8 node --test src/**/*.test.js",
     "test:watch": "c8 node --test --watch src/",
     "prepare": "husky"
   },
@@ -42,10 +42,10 @@
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
-    "fastify": "^4.25.2",
+    "fastify": "^5.3.3",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.0",
-    "mercurius": "^14.0.0",
+    "mercurius": "^16.1.0",
     "pg": "^8.11.3",
     "prettier": "^3.1.1"
   },
