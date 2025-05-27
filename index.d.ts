@@ -1,2 +1,2 @@
-export * from './types/core.d.ts'
-export * from './types/utils.d.ts'
+export type * from './types/core'
+export type * from './types/utils'
