@@ -14,12 +14,15 @@ type ResolverFunction<
   TReturn,
   TArgs extends readonly unknown[] = []
 > = MaybeWithResolve<(...args: TArgs) => MaybePromise<
-  import("mercurius-codegen").DeepPartial< MaybePromise<TReturn>>
+  import("mercurius-codegen").DeepPartial<MaybePromise<TReturn>>
 >>
 
 type TransformResolverGroup<T> = {
   [K in keyof T]: Valid<T[K]> extends ResolverFunction<infer R, infer A>
-  ? ResolverFunction<Valid<ExtractNode<R>>[] | null, A>
+  ? (R extends InConnection<any> ?
+    ResolverFunction<Valid<ExtractNode<R>>[] | null, A>
+    : never
+  )
   : T[K]
 }
 
