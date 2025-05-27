@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "c8 node --test src/**/*.test.js",
-    "test:watch": "c8 node --test --watch src/",
+    "test:watch": "c8 node --test --watch src/**/*.test.js",
     "prepare": "husky"
   },
   "repository": {
