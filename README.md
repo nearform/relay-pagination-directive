@@ -75,7 +75,7 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    dogs(_, { first, after })
+    dogs: (_, { first, after }) => {
       const results = dogs
         .sort((a, b) => {
           return a.id - b.id
@@ -83,8 +83,8 @@ const resolvers = {
         .filter((dog) => (after ? dog.id > after : true))
         .slice(0, first)
 
-      return dogs
-    ,
+      return results
+    },
   },
 };
 
@@ -433,6 +433,45 @@ An object with the following properties
 
 - `typeName` - _string_ - Value of the GQL type represented by this item
 - `id` - _string_ - Unique identifier for this item
+
+### Resolvers Typings
+
+The `NodesOnly` utility type simplifies resolver typings by unwrapping connection
+objects and exposing only the underlying node data.
+In some cases, such as when using pagination patterns, the public schema may define connections,
+while the actual resolver logic returns plain node data. `NodesOnly` adjusts the expected resolver
+typings to reflect this, unwrapping connection layers and exposing the underlying data.
+This is particularly useful when resolver types are auto-generated from the schema, as with tools
+like [mercurius-codegen](https://www.npmjs.com/package/mercurius-codegen)
+or [@graphql-tools/codegen](https://the-guild.dev/graphql/codegen).
+
+```typescript
+import type { NodesOnly } from "relay-pagination-directive";
+import type { Resolvers } from "./generated";
+
+// ...
+
+/**
+ * If `Resolvers` was automatically generated from the schema, it likely
+ * expects data wrapped in Relay-style connection objects.
+ *
+ * Using `NodesOnly<Resolvers>` allows you to return plain arrays of data,
+ * while the connection wrappers (edges, pageInfo, etc.) are added under the hood.
+ */
+const resolvers: NodesOnly<Resolvers> = {
+  Query: {
+    dogs: (_, { first, after }) => {
+      const results = dogs
+        .sort((a, b) => a.id - b.id)
+        .filter(dog => (after ? dog.id > after : true))
+        .slice(0, first);
+
+      return results;
+    },
+  },
+};
+
+```
 
 ## `hasNextPage` Strategies
 
