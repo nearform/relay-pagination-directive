@@ -54,10 +54,5 @@
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix"
-  },
-  "tsd": {
-    "testFiles": [
-      "types/*.test-d.ts"
-    ]
   }
 }
