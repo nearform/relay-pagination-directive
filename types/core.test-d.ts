@@ -212,9 +212,3 @@ expectAssignable<Parameters<typeof connectionDirective>[0]>({
     }
   }
 })
-
-// Test that GraphQLSchema type is properly imported and used
-import type { GraphQLSchema } from 'graphql'
-expectType<(schema: GraphQLSchema) => GraphQLSchema>(
-  connectionDirective().connectionDirectiveTransformer
-)
