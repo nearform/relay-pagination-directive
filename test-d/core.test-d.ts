@@ -6,7 +6,7 @@ import {
   PAGINATION_MODE,
   ConnectionResolverResponse,
   connectionDirective
-} from './core'
+} from '../types/core'
 
 // Test encodeCursor function
 expectType<string>(encodeCursor('User', '123'))

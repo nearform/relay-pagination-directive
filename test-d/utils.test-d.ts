@@ -1,5 +1,5 @@
 import { expectType, expectAssignable } from 'tsd'
-import { NodesOnly } from './utils'
+import { NodesOnly } from '../types/utils'
 
 // Test simple case: NodesOnly should transform resolver groups
 type SimpleResolvers = {
