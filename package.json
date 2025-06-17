@@ -7,7 +7,8 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "test": "c8 node --test src/**/*.test.js",
+    "test": "npm run test:unit && npm run test:types",
+    "test:unit": "c8 node --test src/**/*.test.js",
     "test:watch": "c8 node --test --watch src/**/*.test.js",
     "test:types": "tsd",
     "prepare": "husky"
