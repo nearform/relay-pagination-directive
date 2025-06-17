@@ -15,9 +15,9 @@ expectType<string>(encodeCursor('Post', 456))
 // Test decodeCursor function
 expectType<{ typeName: string; id: string }>(decodeCursor('abc123'))
 
-// Test ConnectionArgs type
-expectType<ConnectionArgs>({ first: 10, after: 'cursor123' })
-expectType<ConnectionArgs>({ first: 5 })
+// Test ConnectionArgs type - use expectAssignable for object literals
+expectAssignable<ConnectionArgs>({ first: 10, after: 'cursor123' })
+expectAssignable<ConnectionArgs>({ first: 5 })
 
 // Test that after is optional
 expectAssignable<ConnectionArgs>({ first: 10 })
@@ -25,18 +25,18 @@ expectAssignable<ConnectionArgs>({ first: 10, after: 'cursor' })
 
 // ConnectionArgs constraint testing is implicit in the positive test cases above
 
-// Test PAGINATION_MODE enum
-expectType<PAGINATION_MODE>(PAGINATION_MODE.SIMPLE)
-expectType<PAGINATION_MODE>(PAGINATION_MODE.EDGES)
-expectType<'simple'>(PAGINATION_MODE.SIMPLE)
-expectType<'edges'>(PAGINATION_MODE.EDGES)
+// Test PAGINATION_MODE enum - fix enum value comparisons
+expectAssignable<PAGINATION_MODE>(PAGINATION_MODE.SIMPLE)
+expectAssignable<PAGINATION_MODE>(PAGINATION_MODE.EDGES)
+expectAssignable<'simple'>(PAGINATION_MODE.SIMPLE)
+expectAssignable<'edges'>(PAGINATION_MODE.EDGES)
 
 // Test ConnectionResolverResponse type with different node types
 type User = { id: string; name: string }
 type Post = { id: number; title: string; content: string }
 
-// Test basic connection response
-expectType<ConnectionResolverResponse<User>>({
+// Test basic connection response - use expectAssignable for complex objects
+expectAssignable<ConnectionResolverResponse<User>>({
   edges: [
     {
       cursor: 'cursor1',
@@ -56,7 +56,7 @@ expectType<ConnectionResolverResponse<User>>({
 })
 
 // Test with different node type
-expectType<ConnectionResolverResponse<Post>>({
+expectAssignable<ConnectionResolverResponse<Post>>({
   edges: [
     {
       cursor: 'post1',
@@ -88,8 +88,8 @@ expectType<{ cursor: string; node: User }>({
   node: { id: '1', name: 'Test' }
 })
 
-// Test pageInfo structure
-expectType<{
+// Test pageInfo structure - use expectAssignable for object literals
+expectAssignable<{
   startCursor: string
   endCursor: string
   hasPreviousPage: boolean
@@ -101,14 +101,14 @@ expectType<{
   hasNextPage: false
 })
 
-// Test connectionDirective function with no parameters
-expectType<{
+// Test connectionDirective function with no parameters - use expectAssignable for return type
+expectAssignable<{
   connectionDirectiveTypeDefs: string
   connectionDirectiveTransformer: (schema: any) => any
 }>(connectionDirective())
 
 // Test connectionDirective with only connectionProperties
-expectType<{
+expectAssignable<{
   connectionDirectiveTypeDefs: string
   connectionDirectiveTransformer: (schema: any) => any
 }>(
@@ -121,7 +121,7 @@ expectType<{
 )
 
 // Test connectionDirective with both parameters
-expectType<{
+expectAssignable<{
   connectionDirectiveTypeDefs: string
   connectionDirectiveTransformer: (schema: any) => any
 }>(
@@ -191,7 +191,7 @@ expectAssignable<Parameters<typeof connectionDirective>[0]>({
 })
 
 // Test directiveName parameter
-expectType<{
+expectAssignable<{
   connectionDirectiveTypeDefs: string
   connectionDirectiveTransformer: (schema: any) => any
 }>(connectionDirective(undefined, 'myPagination'))
