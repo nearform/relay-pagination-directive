@@ -10,6 +10,7 @@
     "test": "npm run test:unit && npm run test:types",
     "test:unit": "c8 node --test src/**/*.test.js",
     "test:watch": "c8 node --test --watch src/**/*.test.js",
+    "test:types": "tstyche",
     "prepare": "husky"
   },
   "repository": {
@@ -49,7 +50,8 @@
     "mercurius": "^16.1.0",
     "mercurius-codegen": "^6.0.1",
     "pg": "^8.11.3",
-    "prettier": "^3.1.1"
+    "prettier": "^3.1.1",
+    "tstyche": "^4.0.2"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix"
