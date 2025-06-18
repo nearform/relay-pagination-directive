@@ -10,7 +10,7 @@
     "test": "npm run test:unit && npm run test:types",
     "test:unit": "c8 node --test src/**/*.test.js",
     "test:watch": "c8 node --test --watch src/**/*.test.js",
-    "test:types": "tsx --test types/**/*.test.ts",
+    "test:types": "tsx --test src/types/**/*.test.ts",
     "prepare": "husky"
   },
   "repository": {
