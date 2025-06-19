@@ -35,7 +35,7 @@ describe('ConnectionArgs type', () => {
   })
 
   test('should accept only first property', () => {
-    expect({ first: 5 }).type.toBeAssignableTo<ConnectionArgs>()
+    expect<ConnectionArgs>().type.toBeAssignableWith({ first: 5 })
   })
 
   test('should accept first with optional after', () => {
