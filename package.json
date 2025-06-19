@@ -4,6 +4,9 @@
   "description": "GQL directive to simplify relay style pagination",
   "main": "index.js",
   "types": "index.d.ts",
+  "exports": {
+    ".": "./index.js"
+  },
   "type": "module",
   "scripts": {
     "lint": "eslint .",

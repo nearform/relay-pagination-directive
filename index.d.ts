@@ -1,2 +1,2 @@
-export type * from './types/core'
-export type * from './types/utils'
+export * from './types/core.js'
+export * from './types/utils.js'

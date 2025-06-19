@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'tstyche'
-import type { NodesOnly } from './utils.js'
+import type { NodesOnly } from 'relay-pagination-directive'
 
 describe('NodesOnly utility type', () => {
   describe('basic functionality', () => {

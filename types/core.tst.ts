@@ -4,8 +4,11 @@ import {
   decodeCursor,
   PAGINATION_MODE,
   connectionDirective
-} from './core.js'
-import type { ConnectionArgs, ConnectionResolverResponse } from './core.js'
+} from 'relay-pagination-directive'
+import type {
+  ConnectionArgs,
+  ConnectionResolverResponse
+} from 'relay-pagination-directive'
 
 describe('encodeCursor function', () => {
   test('should return string for string id', () => {
