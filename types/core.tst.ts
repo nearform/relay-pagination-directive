@@ -1,3 +1,4 @@
+import type { GraphQLSchema } from 'graphql'
 import { expect, test, describe } from 'tstyche'
 import {
   encodeCursor,
@@ -28,22 +29,14 @@ describe('decodeCursor function', () => {
 
 describe('ConnectionArgs type', () => {
   test('should accept first and after properties', () => {
-    expect({
+    expect<ConnectionArgs>().type.toBeAssignableWith({
       first: 10,
       after: 'cursor123'
-    }).type.toBeAssignableTo<ConnectionArgs>()
+    })
   })
 
   test('should accept only first property', () => {
     expect<ConnectionArgs>().type.toBeAssignableWith({ first: 5 })
-  })
-
-  test('should accept first with optional after', () => {
-    expect({ first: 10 }).type.toBeAssignableTo<ConnectionArgs>()
-    expect({
-      first: 10,
-      after: 'cursor'
-    }).type.toBeAssignableTo<ConnectionArgs>()
   })
 })
 
@@ -64,7 +57,7 @@ describe('ConnectionResolverResponse type', () => {
   type Post = { id: number; title: string; content: string }
 
   test('should accept basic connection response with User type', () => {
-    expect({
+    expect<ConnectionResolverResponse<User>>().type.toBe({
       edges: [
         {
           cursor: 'cursor1',
@@ -81,11 +74,11 @@ describe('ConnectionResolverResponse type', () => {
         hasPreviousPage: false,
         hasNextPage: true
       }
-    }).type.toBeAssignableTo<ConnectionResolverResponse<User>>()
+    })
   })
 
   test('should accept connection response with Post type', () => {
-    expect({
+    expect<ConnectionResolverResponse<Post>>().type.toBe({
       edges: [
         {
           cursor: 'post1',
@@ -98,11 +91,11 @@ describe('ConnectionResolverResponse type', () => {
         hasPreviousPage: false,
         hasNextPage: false
       }
-    }).type.toBeAssignableTo<ConnectionResolverResponse<Post>>()
+    })
   })
 
   test('should accept empty edges array', () => {
-    expect({
+    expect<ConnectionResolverResponse<User>>().type.toBeAssignableWith({
       edges: [],
       pageInfo: {
         startCursor: 'start',
@@ -110,36 +103,15 @@ describe('ConnectionResolverResponse type', () => {
         hasPreviousPage: false,
         hasNextPage: false
       }
-    }).type.toBeAssignableTo<ConnectionResolverResponse<User>>()
-  })
-
-  test('should validate edge structure', () => {
-    expect({
-      cursor: 'test',
-      node: { id: '1', name: 'Test' }
-    }).type.toBe<{ cursor: string; node: User }>()
-  })
-
-  test('should validate pageInfo structure', () => {
-    expect({
-      startCursor: 'start',
-      endCursor: 'end',
-      hasPreviousPage: true,
-      hasNextPage: false
-    }).type.toBeAssignableTo<{
-      startCursor: string
-      endCursor: string
-      hasPreviousPage: boolean
-      hasNextPage: boolean
-    }>()
+    })
   })
 })
 
 describe('connectionDirective function', () => {
   test('should return correct type with no parameters', () => {
-    expect(connectionDirective()).type.toBeAssignableTo<{
+    expect(connectionDirective()).type.toBe<{
       connectionDirectiveTypeDefs: string
-      connectionDirectiveTransformer: (schema: any) => any
+      connectionDirectiveTransformer: (schema: GraphQLSchema) => GraphQLSchema
     }>()
   })
 
@@ -151,9 +123,9 @@ describe('connectionDirective function', () => {
           encodeCursor: true
         }
       })
-    ).type.toBeAssignableTo<{
+    ).type.toBe<{
       connectionDirectiveTypeDefs: string
-      connectionDirectiveTransformer: (schema: any) => any
+      connectionDirectiveTransformer: (schema: GraphQLSchema) => GraphQLSchema
     }>()
   })
 
@@ -176,16 +148,16 @@ describe('connectionDirective function', () => {
         },
         'customPagination'
       )
-    ).type.toBeAssignableTo<{
+    ).type.toBe<{
       connectionDirectiveTypeDefs: string
-      connectionDirectiveTransformer: (schema: any) => any
+      connectionDirectiveTransformer: (schema: GraphQLSchema) => GraphQLSchema
     }>()
   })
 })
 
 describe('ConnectionProperties type constraints', () => {
   test('should accept basic connection properties', () => {
-    expect({
+    expect(connectionDirective).type.toBeCallableWith({
       User: {
         paginationMode: 'simple' as const,
         encodeCursor: true
@@ -194,31 +166,31 @@ describe('ConnectionProperties type constraints', () => {
         paginationMode: 'edges' as const,
         encodeCursor: false
       }
-    }).type.toBeAssignableTo<Parameters<typeof connectionDirective>[0]>()
+    })
   })
 
   test('should accept cursorPropOrFn as string', () => {
-    expect({
+    expect(connectionDirective).type.toBeCallableWith({
       User: {
         paginationMode: 'simple' as const,
         encodeCursor: true,
         cursorPropOrFn: 'id'
       }
-    }).type.toBeAssignableTo<Parameters<typeof connectionDirective>[0]>()
+    })
   })
 
   test('should accept cursorPropOrFn as function', () => {
-    expect({
+    expect(connectionDirective).type.toBeCallableWith({
       User: {
         paginationMode: 'simple' as const,
         encodeCursor: true,
         cursorPropOrFn: (item: unknown[]) => `cursor_${item.length}`
       }
-    }).type.toBeAssignableTo<Parameters<typeof connectionDirective>[0]>()
+    })
   })
 
   test('should accept nested connectionProps and edgeProps', () => {
-    expect({
+    expect(connectionDirective).type.toBeCallableWith({
       User: {
         paginationMode: 'simple' as const,
         encodeCursor: true,
@@ -231,20 +203,15 @@ describe('ConnectionProperties type constraints', () => {
           config: { sortable: 'true' }
         }
       }
-    }).type.toBeAssignableTo<Parameters<typeof connectionDirective>[0]>()
+    })
   })
 
   test('should accept directiveName parameter', () => {
-    expect(
-      connectionDirective(undefined, 'myPagination')
-    ).type.toBeAssignableTo<{
-      connectionDirectiveTypeDefs: string
-      connectionDirectiveTransformer: (schema: any) => any
-    }>()
+    expect(connectionDirective).type.toBeCallableWith(undefined, 'myPagination')
   })
 
   test('should accept all optional connection properties', () => {
-    expect({
+    expect(connectionDirective).type.toBeCallableWith({
       ComplexType: {
         paginationMode: 'edges' as const,
         encodeCursor: true,
@@ -258,6 +225,6 @@ describe('ConnectionProperties type constraints', () => {
           metadata: { importance: 'high' }
         }
       }
-    }).type.toBeAssignableTo<Parameters<typeof connectionDirective>[0]>()
+    })
   })
 })

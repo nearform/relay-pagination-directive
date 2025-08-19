@@ -25,8 +25,8 @@ describe('NodesOnly utility type', () => {
       type TransformedResolvers = NodesOnly<SimpleResolvers>
 
       // Test that the transformation preserves the general structure
-      expect({} as TransformedResolvers).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedResolvers>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
 
@@ -34,7 +34,7 @@ describe('NodesOnly utility type', () => {
       type EmptyResolvers = {}
       type TransformedEmpty = NodesOnly<EmptyResolvers>
 
-      expect({} as TransformedEmpty).type.toBe<{}>()
+      expect<TransformedEmpty>().type.toBe<{}>()
     })
   })
 
@@ -53,8 +53,8 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedNestedObject = NodesOnly<NestedResolverObject>
-      expect({} as TransformedNestedObject).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedNestedObject>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
 
@@ -80,8 +80,8 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedNested = NodesOnly<NestedResolvers>
-      expect({} as TransformedNested).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedNested>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
   })
@@ -118,14 +118,14 @@ describe('NodesOnly utility type', () => {
       type TransformedMixed = NodesOnly<MixedResolvers>
 
       // Test that the transformation produces a valid object type
-      expect({} as TransformedMixed).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedMixed>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
 
       // Test that the top-level keys are preserved
-      expect({} as TransformedMixed).type.toBeAssignableTo<{
-        Query: any
-        User: any
+      expect<TransformedMixed>().type.toBeAssignableTo<{
+        Query: unknown
+        User: unknown
       }>()
     })
 
@@ -138,8 +138,8 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedFunctions = NodesOnly<FunctionResolvers>
-      expect({} as TransformedFunctions).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedFunctions>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
   })
@@ -157,8 +157,8 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedOptional = NodesOnly<OptionalResolvers>
-      expect({} as TransformedOptional).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedOptional>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
 
@@ -174,8 +174,8 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedOptionalNodes = NodesOnly<OptionalNodeResolvers>
-      expect({} as TransformedOptionalNodes).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedOptionalNodes>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
   })
@@ -201,8 +201,8 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedComplexEdges = NodesOnly<ComplexEdgeResolvers>
-      expect({} as TransformedComplexEdges).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedComplexEdges>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
 
@@ -230,8 +230,8 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedMultiConnection = NodesOnly<MultiConnectionResolvers>
-      expect({} as TransformedMultiConnection).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedMultiConnection>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
   })
@@ -249,10 +249,10 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedGeneric = NodesOnly<
-        GenericResolvers<{ id: string; data: any }>
+        GenericResolvers<{ id: string; data: unknown }>
       >
-      expect({} as TransformedGeneric).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedGeneric>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
 
@@ -270,8 +270,8 @@ describe('NodesOnly utility type', () => {
       type TransformedConstrainedGeneric = NodesOnly<
         ConstrainedGenericResolvers<{ id: string; name: string }>
       >
-      expect({} as TransformedConstrainedGeneric).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedConstrainedGeneric>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
   })
@@ -289,17 +289,17 @@ describe('NodesOnly utility type', () => {
       }
 
       type TransformedReadonly = NodesOnly<ReadonlyArrayResolvers>
-      expect({} as TransformedReadonly).type.toBeAssignableTo<
-        Record<string, any>
+      expect<TransformedReadonly>().type.toBeAssignableTo<
+        Record<string, unknown>
       >()
     })
   })
 
   describe('NodesOnly constraint validation', () => {
-    test('should work with Record<string, any>', () => {
-      expect({
+    test('should work with Record<string, unknown>', () => {
+      expect<NodesOnly<{ test: { field: string } }>>().type.toBeAssignableWith({
         test: { field: 'value' }
-      }).type.toBeAssignableTo<NodesOnly<{ test: { field: string } }>>()
+      })
     })
   })
 })
