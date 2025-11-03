@@ -297,7 +297,7 @@ describe('NodesOnly utility type', () => {
 
   describe('NodesOnly constraint validation', () => {
     test('should work with Record<string, unknown>', () => {
-      expect<NodesOnly<{ test: { field: string } }>>().type.toBeAssignableWith({
+      expect<NodesOnly<{ test: { field: string } }>>().type.toBeAssignableFrom({
         test: { field: 'value' }
       })
     })
