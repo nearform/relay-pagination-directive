@@ -29,14 +29,14 @@ describe('decodeCursor function', () => {
 
 describe('ConnectionArgs type', () => {
   test('should accept first and after properties', () => {
-    expect<ConnectionArgs>().type.toBeAssignableWith({
+    expect<ConnectionArgs>().type.toBeAssignableFrom({
       first: 10,
       after: 'cursor123'
     })
   })
 
   test('should accept only first property', () => {
-    expect<ConnectionArgs>().type.toBeAssignableWith({ first: 5 })
+    expect<ConnectionArgs>().type.toBeAssignableFrom({ first: 5 })
   })
 })
 
@@ -95,7 +95,7 @@ describe('ConnectionResolverResponse type', () => {
   })
 
   test('should accept empty edges array', () => {
-    expect<ConnectionResolverResponse<User>>().type.toBeAssignableWith({
+    expect<ConnectionResolverResponse<User>>().type.toBeAssignableFrom({
       edges: [],
       pageInfo: {
         startCursor: 'start',
