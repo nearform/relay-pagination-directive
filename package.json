@@ -35,7 +35,7 @@
     "@graphql-tools/schema": "^10.0.2",
     "@graphql-tools/utils": "^11.0.0",
     "@graphql-tools/wrap": "^11.0.1",
-    "graphql": "^16.8.1",
+    "graphql": "^17.0.2",
     "zod": "^4.1.5"
   },
   "devDependencies": {
