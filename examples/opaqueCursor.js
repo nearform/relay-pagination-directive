@@ -64,7 +64,7 @@ const resolvers = {
       let afterId
       if (after) {
         const { id } = decodeCursor(after)
-        after = id
+        afterId = id
       }
       const query = SQL`
         select *
