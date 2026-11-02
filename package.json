@@ -33,7 +33,7 @@
   "homepage": "https://github.com/nearform/relay-pagination-directive#readme",
   "dependencies": {
     "@graphql-tools/schema": "^11.0.6",
-    "@graphql-tools/utils": "^12.0.0",
+    "@graphql-tools/utils": "^13.2.0",
     "@graphql-tools/wrap": "^11.0.1",
     "graphql": "^16.8.1",
     "zod": "^4.1.5"
